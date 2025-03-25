@@ -16,7 +16,7 @@ public class UserController : ControllerBase
 
     public UserController(UserService userService)
     {
-        _userService = userService;
+        _userService = userService ?? throw new ArgumentNullException(nameof(userService));
     }
 
     /// <summary>
@@ -75,11 +75,11 @@ public class UserController : ControllerBase
     [HttpPost]
     public ActionResult<User> CreateUser(User user)
     {
-        if(!ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
-        var createdUser =_userService.CreateUser(user);
+        var createdUser = _userService.CreateUser(user);
         return CreatedAtAction(nameof(GetUser), new { id = createdUser.Id }, createdUser);
     }
 
@@ -92,14 +92,14 @@ public class UserController : ControllerBase
     [HttpPut("{id}")]
     public ActionResult UpdateUser(int id, User updatedUser)
     {
-         if(!ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
         var user = _userService.GetUser(id);
         if (user == null)
         {
-             return NotFound(new ErrorResponse
+            return NotFound(new ErrorResponse
             {
                 Message = $"User with ID {id} not found.",
                 Details = "The user ID provided does not exist in the system."
@@ -125,7 +125,7 @@ public class UserController : ControllerBase
         var user = _userService.GetUser(id);
         if (user == null)
         {
-             return NotFound(new ErrorResponse
+            return NotFound(new ErrorResponse
             {
                 Message = $"User with ID {id} not found.",
                 Details = "The user ID provided does not exist in the system."
