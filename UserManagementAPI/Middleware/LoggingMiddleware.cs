@@ -1,8 +1,7 @@
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
+// Purpose: Middleware to log incoming requests and outgoing responses.
 using System.Diagnostics;
-using System.Threading.Tasks;
 
+namespace UserManagementAPI.Middleware;
 public class LoggingMiddleware
 {
     private readonly RequestDelegate _next;
