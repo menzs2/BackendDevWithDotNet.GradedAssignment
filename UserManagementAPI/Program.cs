@@ -1,4 +1,4 @@
-using System.Reflection;
+using UserManagementAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +7,7 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddSingleton<UserService>();
 var app = builder.Build();
 
 // Enable middleware to serve generated Swagger as a JSON endpoint.

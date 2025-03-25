@@ -1,15 +1,24 @@
 using Microsoft.AspNetCore.Mvc;
+using UserManagementAPI;
 using UserManagementAPI.Controllers;
 using UserManagementAPI.Models;
 using Xunit;
 
 public class UserControllerTests
 {
+    private readonly UserService _userService;
+
+    public UserControllerTests()
+    {
+        _userService = new UserService();
+    }
+
+    
     [Fact]
     public void GetUsers_ReturnsAllUsers()
     {
         // Arrange
-        var controller = new UserController();
+        var controller = new UserController(_userService);
 
         // Act
         var result = controller.GetUsers();
@@ -24,7 +33,7 @@ public class UserControllerTests
     public void GetUser_ReturnsUser_WhenIdIsValid()
     {
         // Arrange
-        var controller = new UserController();
+        var controller = new UserController(_userService);
         int validId = 1;
 
         // Act
@@ -40,7 +49,7 @@ public class UserControllerTests
     public void GetUser_ReturnsNotFound_WhenIdIsInvalid()
     {
         // Arrange
-        var controller = new UserController();
+        var controller = new UserController(_userService);
         int invalidId = 999;
 
         // Act
@@ -54,7 +63,7 @@ public class UserControllerTests
     public void CreateUser_AddsUserAndReturnsCreatedAtAction()
     {
         // Arrange
-        var controller = new UserController();
+        var controller = new UserController(_userService);
         var newUser = new User { FirstName = "Test", LastName = "User", Email = "test.user@example.com", Role = "Tester" };
 
         // Act
@@ -70,7 +79,7 @@ public class UserControllerTests
     public void DeleteUser_RemovesUser_WhenIdIsValid()
     {
         // Arrange
-        var controller = new UserController();
+        var controller = new UserController(_userService);
         int validId = 1;
 
         // Act

@@ -12,14 +12,12 @@ namespace UserManagementAPI.Controllers;
 [ProducesResponseType(StatusCodes.Status200OK)]
 public class UserController : ControllerBase
 {
-    private static List<User> users = new List<User>
+    private readonly UserService _userService;
+
+    public UserController(UserService userService)
     {
-        new User { Id = 1, LastName = "Hawkins", FirstName= "Jim", Email = "jim.Hawkings@example.com", Role = "Cabin boy"},
-        new User { Id = 2, LastName = "Silver", FirstName= "Long John", Email = "barbeque@example.com", Role = "Ship cook and mutiny leader" },
-        new User { Id = 3, LastName = "David", FirstName= "Livesey", Email = "doctor.livesey@example.com",  Role = "Ship's doctor" },
-        new User { Id = 4, LastName = "Trelawney", FirstName= "John", Email = "squire.trewlawney@example.com", Role = "Ship owner" },
-        new User { Id = 5, LastName = "Smollett", FirstName= "Alexander", Email = "captain.smollet@example.com", Role = "Ship captain" }
-    };
+        _userService = userService;
+    }
 
     /// <summary>
     /// Retrieves all users.
@@ -28,6 +26,15 @@ public class UserController : ControllerBase
     [HttpGet]
     public ActionResult<IEnumerable<User>> GetUsers()
     {
+        var users = _userService.GetUsers();
+        if (users == null)
+        {
+            return NotFound(new ErrorResponse
+            {
+                Message = "No users found.",
+                Details = "There are no users in the system."
+            });
+        }
         return Ok(users);
     }
 
@@ -48,7 +55,7 @@ public class UserController : ControllerBase
             });
         }
 
-        var user = users.FirstOrDefault(u => u.Id == id);
+        var user = _userService.GetUser(id);
         if (user == null)
         {
             return NotFound(new ErrorResponse
@@ -72,9 +79,8 @@ public class UserController : ControllerBase
         {
             return BadRequest(ModelState);
         }
-        user.Id = users.Count > 0 ? users.Max(u => u.Id) + 1 : 1;
-        users.Add(user);
-        return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+        var createdUser =_userService.CreateUser(user);
+        return CreatedAtAction(nameof(GetUser), new { id = createdUser.Id }, createdUser);
     }
 
     /// <summary>
@@ -90,7 +96,7 @@ public class UserController : ControllerBase
         {
             return BadRequest(ModelState);
         }
-        var user = users.FirstOrDefault(u => u.Id == id);
+        var user = _userService.GetUser(id);
         if (user == null)
         {
              return NotFound(new ErrorResponse
@@ -116,7 +122,7 @@ public class UserController : ControllerBase
     [HttpDelete("{id}")]
     public ActionResult DeleteUser(int id)
     {
-        var user = users.FirstOrDefault(u => u.Id == id);
+        var user = _userService.GetUser(id);
         if (user == null)
         {
              return NotFound(new ErrorResponse
@@ -126,7 +132,7 @@ public class UserController : ControllerBase
             });
         }
 
-        users.Remove(user);
+        _userService.DeleteUser(user.Id);
         return NoContent();
     }
 }
