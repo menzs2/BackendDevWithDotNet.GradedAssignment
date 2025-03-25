@@ -14,10 +14,11 @@ public class UserController : ControllerBase
 {
     private static List<User> users = new List<User>
     {
-        new User { Id = 1, LastName = "Hawkings", FirstName= "Jim", Email = "jim.Hawkings@example.com" },
-        new User { Id = 2, LastName = "Silver", FirstName= "Long John", Email = "barbeque@example.com" },
-        new User { Id = 3, LastName = "David", FirstName= "Livesey", Email = "doctor.livesey@example.com" },
-        new User { Id = 4, LastName = "Trelawney", FirstName= "John", Email = "squire.trewlawney@example.com" },
+        new User { Id = 1, LastName = "Hawkins", FirstName= "Jim", Email = "jim.Hawkings@example.com", Role = "Cabin boy"},
+        new User { Id = 2, LastName = "Silver", FirstName= "Long John", Email = "barbeque@example.com", Role = "Ship cook and mutiny leader" },
+        new User { Id = 3, LastName = "David", FirstName= "Livesey", Email = "doctor.livesey@example.com",  Role = "Ship's doctor" },
+        new User { Id = 4, LastName = "Trelawney", FirstName= "John", Email = "squire.trewlawney@example.com", Role = "Ship owner" },
+        new User { Id = 5, LastName = "Smollett", FirstName= "Alexander", Email = "captain.smollet@example.com", Role = "Ship captain" }
     };
 
     /// <summary>
