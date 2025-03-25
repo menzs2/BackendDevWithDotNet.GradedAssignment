@@ -39,10 +39,23 @@ public class UserController : ControllerBase
     [HttpGet("{id}")]
     public ActionResult<User> GetUser(int id)
     {
+        if (id <= 0)
+        {
+            return BadRequest(new ErrorResponse
+            {
+                Message = "Invalid user ID.",
+                Details = "The user ID must be greater than 0."
+            });
+        }
+
         var user = users.FirstOrDefault(u => u.Id == id);
         if (user == null)
         {
-            return NotFound();
+            return NotFound(new ErrorResponse
+            {
+                Message = $"User with ID {id} not found.",
+                Details = "The user ID provided does not exist in the system."
+            });
         }
         return Ok(user);
     }
@@ -55,9 +68,9 @@ public class UserController : ControllerBase
     [HttpPost]
     public ActionResult<User> CreateUser(User user)
     {
-        if(user == null || !ModelState.IsValid)
+        if(!ModelState.IsValid)
         {
-            return BadRequest();
+            return BadRequest(ModelState);
         }
         user.Id = users.Count > 0 ? users.Max(u => u.Id) + 1 : 1;
         users.Add(user);
@@ -73,14 +86,18 @@ public class UserController : ControllerBase
     [HttpPut("{id}")]
     public ActionResult UpdateUser(int id, User updatedUser)
     {
-         if(updatedUser == null || !ModelState.IsValid)
+         if(!ModelState.IsValid)
         {
-            return BadRequest();
+            return BadRequest(ModelState);
         }
         var user = users.FirstOrDefault(u => u.Id == id);
         if (user == null)
         {
-            return NotFound();
+             return NotFound(new ErrorResponse
+            {
+                Message = $"User with ID {id} not found.",
+                Details = "The user ID provided does not exist in the system."
+            });
         }
 
         user.LastName = updatedUser.LastName;
@@ -102,7 +119,11 @@ public class UserController : ControllerBase
         var user = users.FirstOrDefault(u => u.Id == id);
         if (user == null)
         {
-            return NotFound();
+             return NotFound(new ErrorResponse
+            {
+                Message = $"User with ID {id} not found.",
+                Details = "The user ID provided does not exist in the system."
+            });
         }
 
         users.Remove(user);
