@@ -8,6 +8,8 @@ namespace UserManagementAPI.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
+[Produces("application/json")]
+[ProducesResponseType(StatusCodes.Status200OK)]
 public class UserController : ControllerBase
 {
     private static List<User> users = new List<User>
@@ -18,7 +20,7 @@ public class UserController : ControllerBase
         new User { Id = 4, LastName = "Trelawney", FirstName= "John", Email = "squire.trewlawney@example.com" },
     };
 
-    /// <summary
+    /// <summary>
     /// Retrieves all users.
     /// </summary>
     /// <returns>A list of users.</returns>
@@ -74,7 +76,7 @@ public class UserController : ControllerBase
 
         user.LastName = updatedUser.LastName;
         user.FirstName = updatedUser.FirstName;
-        user.Role = updatedUser.Role;   
+        user.Role = updatedUser.Role;
         user.Email = updatedUser.Email;
 
         return NoContent();

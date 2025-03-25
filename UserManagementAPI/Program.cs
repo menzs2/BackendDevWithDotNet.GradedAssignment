@@ -2,27 +2,31 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers();
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    // Enable XML comments for Swagger
-    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-});
+builder.Services.AddSwaggerGen();
 
-builder.Services.AddControllers();
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Enable middleware to serve generated Swagger as a JSON endpoint.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseExceptionHandler("/Home/Error");
 }
 
 app.UseHttpsRedirection();
+app.UseRouting();
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();
 
