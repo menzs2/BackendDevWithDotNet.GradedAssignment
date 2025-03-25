@@ -55,6 +55,10 @@ public class UserController : ControllerBase
     [HttpPost]
     public ActionResult<User> CreateUser(User user)
     {
+        if(user == null || !ModelState.IsValid)
+        {
+            return BadRequest();
+        }
         user.Id = users.Count > 0 ? users.Max(u => u.Id) + 1 : 1;
         users.Add(user);
         return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
@@ -69,6 +73,10 @@ public class UserController : ControllerBase
     [HttpPut("{id}")]
     public ActionResult UpdateUser(int id, User updatedUser)
     {
+         if(updatedUser == null || !ModelState.IsValid)
+        {
+            return BadRequest();
+        }
         var user = users.FirstOrDefault(u => u.Id == id);
         if (user == null)
         {
