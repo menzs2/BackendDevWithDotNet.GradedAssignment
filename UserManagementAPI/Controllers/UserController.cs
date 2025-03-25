@@ -3,24 +3,36 @@ using UserManagementAPI.Models;
 
 namespace UserManagementAPI.Controllers;
 
+/// <summary>
+/// Controller for managing users.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class UserController : ControllerBase
 {
     private static List<User> users = new List<User>
     {
-        new User { Id = 1, LastName = "John Doe", Email = "john.doe@example.com" },
-        new User { Id = 2, LastName = "Jane Smith", Email = "jane.smith@example.com" }
+        new User { Id = 1, LastName = "Hawkings", FirstName= "Jim", Email = "jim.Hawkings@example.com" },
+        new User { Id = 2, LastName = "Silver", FirstName= "Long John", Email = "barbeque@example.com" },
+        new User { Id = 3, LastName = "David", FirstName= "Livesey", Email = "doctor.livesey@example.com" },
+        new User { Id = 4, LastName = "Trelawney", FirstName= "John", Email = "squire.trewlawney@example.com" },
     };
 
-    // GET: api/User
+    /// <summary
+    /// Retrieves all users.
+    /// </summary>
+    /// <returns>A list of users.</returns>
     [HttpGet]
     public ActionResult<IEnumerable<User>> GetUsers()
     {
         return Ok(users);
     }
 
-    // GET: api/User/{id}
+    /// <summary>
+    /// Retrieves a user by ID.
+    /// </summary>
+    /// <param name="id">The ID of the user.</param>
+    /// <returns>The user with the specified ID.</returns>
     [HttpGet("{id}")]
     public ActionResult<User> GetUser(int id)
     {
@@ -32,7 +44,11 @@ public class UserController : ControllerBase
         return Ok(user);
     }
 
-    // POST: api/User
+    /// <summary>
+    /// Creates a new user.
+    /// </summary>
+    /// <param name="user">The user to create.</param>
+    /// <returns>The created user.</returns>
     [HttpPost]
     public ActionResult<User> CreateUser(User user)
     {
@@ -41,7 +57,12 @@ public class UserController : ControllerBase
         return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
     }
 
-    // PUT: api/User/{id}
+    /// <summary>
+    /// Updates an existing user.
+    /// </summary>
+    /// <param name="id">The ID of the user to update.</param>
+    /// <param name="updatedUser">The updated user data.</param>
+    /// <returns>No content.</returns>
     [HttpPut("{id}")]
     public ActionResult UpdateUser(int id, User updatedUser)
     {
@@ -59,7 +80,11 @@ public class UserController : ControllerBase
         return NoContent();
     }
 
-    // DELETE: api/User/{id}
+    /// <summary>
+    /// Deletes a user by ID.
+    /// </summary>
+    /// <param name="id">The ID of the user to delete.</param>
+    /// <returns>No content.</returns>
     [HttpDelete("{id}")]
     public ActionResult DeleteUser(int id)
     {
